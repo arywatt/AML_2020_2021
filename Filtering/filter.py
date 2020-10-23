@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 from scipy.signal import convolve2d as conv2
 import matplotlib.pyplot as plt
-import pathlib
+
 
 import gauss_module
 
