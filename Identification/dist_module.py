@@ -15,7 +15,14 @@ def dist_intersect(x,y):
   s = s/np.sum(x) + s/np.sum(y)
   s = s/2
 
-  return 1 - s
+  s = 1 - s
+  if s < 0:
+    s = 0
+
+  if s > 1:
+    s = 1
+
+  return s
 
 
 
@@ -26,6 +33,12 @@ def dist_l2(x,y):
   s = 0
   for q,v in zip(x,y):
     s = s + pow(q - v,2)
+
+  if s < 0:
+    s = 0
+
+  if s > np.sqrt(2):
+    s = np.sqrt(2)
 
   return s
 
@@ -42,6 +55,9 @@ def dist_chi2(x,y):
       s = s + pow(q-v,2)/(q+v)
     else :
       s = s + pow(q-v,2)
+
+  if s < 0:
+    s = 0
 
   return s
 

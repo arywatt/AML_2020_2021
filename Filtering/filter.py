@@ -7,8 +7,6 @@ import matplotlib.pyplot as plt
 
 import gauss_module
 
-
-
 def rgb2gray(rgb):
 
     r, g, b = rgb[:,:,0], rgb[:,:,1], rgb[:,:,2]

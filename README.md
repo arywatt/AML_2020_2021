@@ -1,1 +1,7 @@
-# AML_2020_2021
+# AML REPORT
+
+## Image Filtering and Object Identification
+
+#### Greshma Spandana Chittamuru
+#### Yao Wateba APPETI
+

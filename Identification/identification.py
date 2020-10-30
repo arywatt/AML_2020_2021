@@ -116,33 +116,33 @@ for img1_file in image_files1:
     img1_color = np.array(Image.open(img1_file))
     img1_color = img1_color.astype('double')
     img1_gray = rgb2gray(img1_color)
-    
+
     for img2_file in image_files2:
         img2_color = np.array(Image.open(img2_file))
         img2_color = img2_color.astype('double')
         img2_gray = rgb2gray(img2_color)
-    
+
         D = np.zeros( (len(distance_types),len(hist_types)) )
-    
+
         for didx in range(len(distance_types)):
-    
+
             for hidx in range(len(hist_types)):
-    
+
                 if histogram_module.is_grayvalue_hist(hist_types[hidx]):
                     hist1 = histogram_module.get_hist_by_name(img1_gray, num_bins_gray, hist_types[hidx])
                     hist2 = histogram_module.get_hist_by_name(img2_gray, num_bins_gray, hist_types[hidx])
-            
+
                 else:
                     hist1 = histogram_module.get_hist_by_name(img1_color, num_bins_color, hist_types[hidx])
                     hist2 = histogram_module.get_hist_by_name(img2_color, num_bins_color, hist_types[hidx])
-    
+
                 if len(hist1) == 2:
                     hist1 = hist1[0]
                 if len(hist2) == 2:
                     hist2 = hist2[0]
-    
+
                 D[didx, hidx] = dist_module.get_dist_by_name(hist1, hist2, distance_types[didx])
-         
+
         print('Comparison of images "%s" to "%s":'% (img1_file, img2_file))
         print(D)
         print('\n')
@@ -162,19 +162,17 @@ print('%s-%s, %s-%s, %s-%s, %s-%s'%('chi2', 'grayvalue', 'chi2', 'rgb', 'chi2', 
 
 with open('model.txt') as fp:
     model_images = fp.readlines()
-model_images = [x.strip() for x in model_images] 
+model_images = [x.strip() for x in model_images]
 
 with open('query.txt') as fp:
     query_images = fp.readlines()
-query_images = [x.strip() for x in query_images] 
+query_images = [x.strip() for x in query_images]
 
 dist_type = 'intersect';
 hist_type = 'rg';
 num_bins = 30;
 
 [best_match, D] = match_module.find_best_match(model_images, query_images, dist_type, hist_type, num_bins)
-
-
 
 ## visualize nearest neighbors (Question 3.b)
 query_images_vis = [query_images[i] for i in np.array([0,4,9])]
@@ -187,6 +185,39 @@ match_module.show_neighbors(model_images, query_images_vis, dist_type, hist_type
 num_correct = sum( best_match == range(len(query_images)) )
 print('number of correct matches: %d (%f)\n'% (num_correct, 1.0 * num_correct / len(query_images)))
 
+#Experiments conducted
+
+from itertools import product
+
+# Set experiments to True to run code below
+#Purpose is to find best configuration
+experiments = False
+
+if experiments:
+    dist_type_values = ['chi2', 'intersect', 'l2'];
+    hist_type_values = ['rg','rgb','dxdy']
+    num_bin_values = [10,20,30,40]
+
+    best_score = 0
+    best_config = None
+    for config in product(dist_type_values,hist_type_values,num_bin_values):
+
+        current_config = config
+        dist_type, hist_type, num_bins = config
+        [best_match, D] = match_module.find_best_match(model_images, query_images, dist_type, hist_type, num_bins)
+        num_correct = sum(best_match == range(len(query_images)))
+        score = 1.0 * num_correct / len(query_images)
+
+        if score > best_score:
+            best_score = score
+            best_config = (dist_type, hist_type, num_bins)
+            print('number of correct matches: %d (%f)' % (num_correct, best_score))
+            print('Best configuration:')
+            print((dist_type, hist_type, num_bins))
+        else:
+            print('not better')
+
+
 
 
 
@@ -196,13 +227,13 @@ print('number of correct matches: %d (%f)\n'% (num_correct, 1.0 * num_correct / 
 
 with open('model.txt') as fp:
     model_images = fp.readlines()
-model_images = [x.strip() for x in model_images] 
+model_images = [x.strip() for x in model_images]
 
 with open('query.txt') as fp:
     query_images = fp.readlines()
-query_images = [x.strip() for x in query_images] 
+query_images = [x.strip() for x in query_images]
 
-num_bins = 20
+num_bins = 30
 
 
 plt.figure(8)
