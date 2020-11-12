@@ -71,7 +71,8 @@ def plot_rpc(D, plot_color):
         precision.append(p)
         recall.append(r)
     
-    plt.plot([1-precision[i] for i in range(len(precision))], recall, plot_color+'-')
+    plt.plot([1 - precision[i] for i in range(len(precision))], recall, plot_color+'-')
+
 
 
 
@@ -82,13 +83,14 @@ def compare_dist_rpc(model_images, query_images, dist_types, hist_type, num_bins
     for idx in range( len(dist_types) ):
 
         [best_match, D] = match_module.find_best_match(model_images, query_images, dist_types[idx], hist_type, num_bins)
-        print(hist_type)
+
         plot_rpc(D, plot_colors[idx])
     
 
     plt.axis([0, 1, 0, 1])
     plt.xlabel('1 - precision')
     plt.ylabel('recall')
+
     
     # legend(dist_types, 'Location', 'Best')
     

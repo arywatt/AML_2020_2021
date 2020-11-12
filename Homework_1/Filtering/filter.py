@@ -93,7 +93,7 @@ plt.show()
 
 img_c = np.array(Image.open('graf.png')).astype('double')
 img = rgb2gray(img_c)
-img = gauss_module.gaussianfilter(img, sigma)
+img = gauss_module.gaussianfilter(img, sigma)  # here we smooth the image before applying derivative
 [imgDx, imgDy] = gauss_module.gaussderiv(img, 7.0)
 
 plt.figure(8)

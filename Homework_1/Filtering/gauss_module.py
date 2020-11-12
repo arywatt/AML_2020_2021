@@ -68,9 +68,7 @@ def gaussderiv(img, sigma):
 
     img_smoothed = gaussianfilter(img,sigma)
 
-    #imgDx = conv2(conv2(img, Gx, 'same'), Dx, 'same')
     imgDx = conv2(img_smoothed, Dx, 'same')
-    #imgDy = conv2(conv2(img, Gx.T, 'same'), Dx, 'same')
     imgDy = conv2(img_smoothed, Dx.T, 'same')
 
     return imgDx, imgDy
