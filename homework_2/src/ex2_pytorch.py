@@ -118,11 +118,7 @@ class MultiLayerPerceptron(nn.Module):
 
         layers.append(nn.Linear(self.input_size, self.hidden_layers[0]))
         layers.append(nn.ReLU())
-        layers.append(nn.Linear(self.hidden_layers[0], 30))
-        layers.append(nn.ReLU())
-        layers.append(nn.Linear(30, 20))
-        layers.append(nn.ReLU())
-        layers.append(nn.Linear(20, self.num_classes))
+        layers.append(nn.Linear(self.hidden_layers[0], self.num_classes))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
