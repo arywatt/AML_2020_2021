@@ -93,9 +93,32 @@ class TwoLayerNet(object):
         
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        
 
-        pass
+        # We use Matricial notation
+        # With th help of numpy library
+        # We multiply input by weigths adding the bias
+
+        Z2 = np.dot(X,W1) + b1
+
+        # We apply the RELU activation
+        # (Z>=0) generates binary vector , 1 if element >= 0 , 0 otherwise
+        # Then multiplying we keep element >= 0 and replacce other by 0
+        # this is the Relu Activation
+
+        X2 = Z2 * (Z2>=0).astype(int)
+
+        # We multiply layer 1 output  by weigths W2 adding the bias b2
+        Z3 = np.dot(X2,W2) + b2
+
+
+        # We apply softmax to results
+
+        S = np.exp(Z3).sum(axis=1)
+        S = S.reshape(Z3.shape[0], 1)
+        scores = np.exp(Z3) / S
+
+
+
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -118,10 +141,23 @@ class TwoLayerNet(object):
         # Implement the loss for the softmax output layer
         
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+
+        # We simply apply  -log to the score
+        loss = -np.log(scores)
+
+        #then we compute the mean
+        loss = np.mean(loss)
+
+        #then we regularize the loss
+        # adding weigths norm
+        # setting lamda = 1
+        lamda = 0.23064692942650808
+        # correct_loss = 1.30378789133
+        # r = np.linalg.norm(W1)**2 + np.linalg.norm(W2)**2
+        # lamda = (correct_loss - loss) / r
+
+        loss = loss + lamda * (np.linalg.norm(W1)**2 + np.linalg.norm(W2)**2)
         
-        
-        
-        pass
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
