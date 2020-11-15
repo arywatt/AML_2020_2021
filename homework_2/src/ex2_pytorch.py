@@ -118,9 +118,11 @@ class MultiLayerPerceptron(nn.Module):
 
         layers.append(nn.Linear(self.input_size, self.hidden_layers[0]))
         layers.append(nn.ReLU())
-        layers.append(nn.Linear(self.hidden_layers[0], self.num_classes))
-
-
+        layers.append(nn.Linear(self.hidden_layers[0], 30))
+        layers.append(nn.ReLU())
+        layers.append(nn.Linear(30, 20))
+        layers.append(nn.ReLU())
+        layers.append(nn.Linear(20, self.num_classes))
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -139,7 +141,7 @@ class MultiLayerPerceptron(nn.Module):
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
         out = self.layers(x)
-        #out = nn.CrossEntropyLoss(out)
+
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         
@@ -177,7 +179,11 @@ if train:
             # Use examples in https://pytorch.org/tutorials/beginner/pytorch_with_examples.html
             #################################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+            images = images.reshape((batch_size,input_size))
             predicted = model(images)
+
+            # print('train_predicted shape', predicted.shape)
+            # print('train_labels_shape', labels.shape)
             loss =  criterion(predicted,labels)
 
             optimizer.zero_grad()
@@ -207,9 +213,19 @@ if train:
                 # 2. Get the most confident predicted class        #
                 ####################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
-
+                images = images.reshape((batch_size, input_size))
                 predicted = model(images)
-                loss = criterion(predicted,labels)
+
+
+
+                predicted = nn.Softmax(dim=1)(predicted)
+                predicted = torch.argmax(predicted, dim=1)
+
+
+
+                # print('eval_predicted shape',predicted.shape)
+                # print('eval_labels_shape',labels.shape)
+                #loss = criterion(predicted,labels)
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
                 total += labels.size(0)
