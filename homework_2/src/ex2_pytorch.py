@@ -112,7 +112,15 @@ class MultiLayerPerceptron(nn.Module):
         
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-        
+        self.input_size = input_size
+        self.hidden_layers = hidden_layers
+        self.num_classes = num_classes
+
+        layers.append(nn.Linear(self.input_size, self.hidden_layers[0]))
+        layers.append(nn.ReLU())
+        layers.append(nn.Linear(self.hidden_layers[0], self.num_classes))
+
+
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
@@ -130,7 +138,8 @@ class MultiLayerPerceptron(nn.Module):
         
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-
+        out = self.layers(x)
+        #out = nn.CrossEntropyLoss(out)
 
         # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         
@@ -138,11 +147,11 @@ class MultiLayerPerceptron(nn.Module):
 
 model = MultiLayerPerceptron(input_size, hidden_size, num_classes).to(device)
 # Print model's state_dict
-'''
+
 print("Model's state_dict:")
 for param_tensor in model.state_dict():
     print(param_tensor, "\t", model.state_dict()[param_tensor].size())
-'''
+
 
 if train:
     model.apply(weights_init)
@@ -168,6 +177,12 @@ if train:
             # Use examples in https://pytorch.org/tutorials/beginner/pytorch_with_examples.html
             #################################################################################
             # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
+            predicted = model(images)
+            loss =  criterion(predicted,labels)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
 
 
@@ -193,7 +208,8 @@ if train:
                 ####################################################
                 # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-            
+                predicted = model(images)
+                loss = criterion(predicted,labels)
 
                 # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
                 total += labels.size(0)
