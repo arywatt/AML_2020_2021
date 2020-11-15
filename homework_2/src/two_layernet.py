@@ -172,7 +172,7 @@ class TwoLayerNet(object):
 
         # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
         
-        
+         #D = (Z2>=0).astype(int)
 
         pass
 
